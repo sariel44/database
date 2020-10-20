@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5ff35d059cb7810f051c83baf496f03f0a70eeaa14436932be028472467a066f
+-- hash: 4e8a7b29a99f37d4df10b292ad98170bff3723601db6fe52f034300a67882def
 
 name:           database
 version:        0.1.0.0
@@ -34,10 +34,11 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , cereal
     , containers
     , cryptonite
     , fuzzyset
-    , proto3-wire
+    , text
   default-language: Haskell2010
 
 executable database-exe
@@ -49,11 +50,12 @@ executable database-exe
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , cereal
     , containers
     , cryptonite
     , database
     , fuzzyset
-    , proto3-wire
+    , text
   default-language: Haskell2010
 
 test-suite database-test
@@ -66,9 +68,10 @@ test-suite database-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , cereal
     , containers
     , cryptonite
     , database
     , fuzzyset
-    , proto3-wire
+    , text
   default-language: Haskell2010

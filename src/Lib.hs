@@ -4,28 +4,25 @@ module Lib
 
 import qualified Data.Map.Strict as M 
 import Data.FuzzySet
-import Data.Text
+import qualified Data.Text as T
 import Control.Monad
+import qualified Data.Vector as V
 
 
-data DBOp = PutKeyWord Text
-           | PutTag Text
-           | PutText Text 
+data DBOp = PutKeyWord T.Text
+           | PutTag T.Text
+           | PutText T.Text 
     deriving (Show, Read)
           
 
-data TableFile = TableFile {
-      table_name :: String
-    , index_name :: String
-    } 
-
-newtype Secret = Secret { secret :: Text }  
+newtype Secret = Secret { secret :: T.Text }  
 
 data Table = Table { 
-      fuzzy :: M.Map Text FuzzySet
-    , keywords :: [Text]
-    , tags :: M.Map Text [Text]
-    , text :: Text
+      fuzzy :: M.Map T.Text FuzzySet
+    , tableName :: String
+    , keywords :: [T.Text]
+    , tags :: M.Map T.Text [T.Text]
+    , text :: T.Text
 }
 
 data Database = Database {
@@ -35,16 +32,25 @@ data Database = Database {
 } 
 
 class FileLoader m where 
-    loadFile :: String -> m Text 
+    loadFile :: String -> m T.Text 
 
 class FileLister m where 
     listFiles :: String -> m [String]
 
+class FileSaver m where
+    saveFile :: String -> T.Text -> m ()
+
 {-- 
     Toplevel API 
 --}
-saveDatabase :: Database -> IO ()
-saveDatabase d = undefined
+saveDatabase :: (Monad m, FileSaver m) => Database -> m ()
+saveDatabase d = forM_ ts (saveTable p s)
+        where p = path d
+              s = databaseSecret d 
+              ts = tables d
+
+saveTable :: FileSaver m => String -> Secret -> Table -> m () 
+saveTable path secret table = undefined 
 
 loadDatabase :: (Monad m, FileLoader m, FileLister m) => Secret -> String -> m Database 
 loadDatabase s p = (Database p s . M.fromList) <$> tables 

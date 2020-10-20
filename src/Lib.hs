@@ -13,10 +13,22 @@ import Control.Applicative
 import Control.Monad.IO.Class
 import Control.Monad.Trans
 import Control.Monad.State
+import Control.Monad.Reader
+import Control.Monad.Error
+
 import qualified Data.Vector as V
 import qualified Data.ByteString as B
+
 import Data.Monoid 
 import System.Directory
+import System.IO
+import Data.Serialize.Put
+import Data.Serialize.Get
+import Data.Word
+
+import Crypto.KDF.PBKDF2
+import Crypto.Cipher.AES (AES256)
+import Crypto.Random.EntropyPool
 
 
 data DBOp = PutKeyWord T.Text
@@ -25,6 +37,14 @@ data DBOp = PutKeyWord T.Text
            | TableName String
     deriving (Show, Read)
           
+version :: (Word8,Word8,Word8)
+version = (0,0,1)
+
+magic :: B.ByteString
+magic = "shitfuck"
+
+salt :: B.ByteString
+salt = "sadhau389u32kdjnasod89as8afn923h8"
 
 newtype Secret = Secret { secret :: B.ByteString }  
 
@@ -57,18 +77,55 @@ class FileSaver m where
 
 
 class OpsCrypter (m :: * -> *) o where 
-    encryptOps :: Secret -> [o] -> m B.ByteString
+    encryptOps :: MonadError String m => Secret -> [o] -> m B.ByteString
 
 class OpsDecrypter (m :: * -> *) o where 
-    decryptOps :: Secret -> B.ByteString -> m [o]
+    decryptOps :: MonadError String m => Secret -> B.ByteString -> m [o]
+
+
+class GetBits m where
+    getBits :: Int -> m B.ByteString
+
 
 {-- DBMonad --}
 
-newtype DBMonad a = DBMonad { runDBMonad :: StateT Database IO a}
-        deriving (Monad, Functor, Applicative, MonadIO, MonadState Database)
+newtype DBMonad a = DBMonad { runDBMonad :: ReaderT EntropyPool (StateT Database (ErrorT String IO)) a}
+        deriving (Monad, Functor, Applicative, MonadIO, MonadState Database, MonadError String, MonadReader EntropyPool)
+
+
+instance GetBits DBMonad where 
+    getBits n = do
+        et <- ask
+        liftIO $ getEntropyFrom et n 
+
+        
 
 instance FileLister DBMonad where 
     listFiles fp = liftIO (getDirectoryContents fp)
+
+instance FileSaver DBMonad where 
+    saveFile fp = liftIO . B.writeFile fp 
+
+parameters = Parameters 4000 256
+
+instance OpsCrypter DBMonad DBOp where
+    encryptOps s bs = do
+            let bs = runPut printer
+            return bs
+
+        where printer :: Put 
+              printer = do
+                putByteString magic
+                putWord8 major 
+                putWord8 minor 
+                putWord8 patch 
+                putWord8 0
+                putByteString (encodeOps bs)
+
+              (major,minor,patch) = version
+
+encodeOps :: [DBOp] -> B.ByteString
+encodeOps = undefined
 
 {-- 
     Toplevel API 

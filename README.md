@@ -4,7 +4,7 @@ Simple cli-driven document database on top of git. You can fuzzy search through 
 
 It allows encryption through git-secret. I wanted something I could search through the standard core-utils and which naturally allows encryption and versioning. 
 
-Git and git-secret together with this simple tool matches perfectly. 
+Git and git-secret[1] together with this simple tool matches perfectly.  
 
 # Installation 
 
@@ -31,3 +31,6 @@ First create a gpg key
 # Todo 
 
 * Add random keyvalue pairs as metadata
+
+#Refs
+[1] https://git-secret.io

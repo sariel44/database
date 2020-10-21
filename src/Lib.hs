@@ -22,54 +22,25 @@ import qualified Data.ByteString as B
 import Data.Monoid 
 import System.Directory
 import System.IO
-import Data.Serialize.Put
-import Data.Serialize.Get
-import Data.Word
+import Data.Aeson.TH
+
+import Model
 
 import Crypto.KDF.PBKDF2
 import Crypto.Cipher.AES (AES256)
 import Crypto.Cipher.Types
-import           Crypto.Cipher.AES (AES256)
-import           Crypto.Cipher.Types (BlockCipher(..), Cipher(..), nullIV, KeySizeSpecifier(..), IV, makeIV)
-import           Crypto.Error (CryptoFailable(..), CryptoError(..))
+import  Crypto.Cipher.Types (BlockCipher(..), Cipher(..), nullIV, KeySizeSpecifier(..), IV, makeIV)
+import  Crypto.Error (CryptoFailable(..), CryptoError(..))
 
 import Crypto.Random.EntropyPool
 
-
-data DBOp = PutKeyWord T.Text
-           | PutTag T.Text
-           | PutText T.Text 
-           | TableName String
-    deriving (Show, Read)
           
-version :: (Word8,Word8,Word8)
-version = (0,0,1)
-
-magic :: B.ByteString
-magic = "shitfuck"
-
 salt :: B.ByteString
 salt = "sadhau389u32kdjnasod89as8afn923h8"
-
-newtype Secret = Secret { secret :: B.ByteString }  
-
-data Table = Table { 
-      fuzzy :: M.Map T.Text FuzzySet
-    , tableName :: String
-    , keywords :: [T.Text]
-    , tags :: M.Map T.Text Bool
-    , text :: T.Text
-}
 
 
 emptyTable :: Table
 emptyTable = Table M.empty "nothing" [] M.empty ""
-
-data Database = Database {
-      path :: String
-    , databaseSecret :: Secret
-    , tables :: M.Map String Table 
-} 
 
 class FileLoader m where 
     loadFile :: String -> m B.ByteString 
@@ -80,12 +51,12 @@ class FileLister m where
 class FileSaver m where
     saveFile :: String -> B.ByteString -> m ()
 
-class OpsEncrypter (m :: * -> *) o where
-    encryptOps :: Secret -> [o] -> m B.ByteString
+class TableEncrypter (m :: * -> *) where
+    encryptTable :: Secret -> Table -> m B.ByteString
 
 
-class OpsDecrypter (m :: * -> *) o where
-    decryptOps :: Secret -> B.ByteString -> m [o] 
+class TableDecrypter (m :: * -> *) o where
+    decryptTable :: Secret -> B.ByteString -> m Database
 
 
 class GetBits m where
@@ -118,9 +89,9 @@ blockCipher = undefined
 deriveKey :: Secret -> B.ByteString
 deriveKey s = fastPBKDF2_SHA512 parameters (secret s) salt  
 
-instance OpsEncrypter DBMonad DBOp where 
-    encryptOps s ops = do
-            let bs = runPut printer
+instance TableEncrypter DBMonad where 
+    encryptOps table = do
+            let bs =
             let key = deriveKey s
             case cipherInit key of 
                 CryptoFailed e -> throwError (show e)
@@ -129,20 +100,25 @@ instance OpsEncrypter DBMonad DBOp where
                     case iv of
                         Nothing -> throwError "No iv created"
                         Just iv -> return $ ctrCombine c iv bs 
-        where 
-            (major,minor,patch) = version
-            printer :: Put 
-            printer = do
-                putByteString magic
-                putWord8 major 
-                putWord8 minor 
-                putWord8 patch 
-                putWord8 0
-                putByteString (encodeOps ops)
 
 
 encodeOps :: [DBOp] -> B.ByteString
-encodeOps = undefined
+encodeOps xs = runPut . mapM_ step 
+    where 
+        step (TableName nm) = do
+            putWord8 3
+            putByteString $ T.encodeUtf8 nm
+        step (PutText txt) = do
+            putWord8 2
+            putByteString $ T.encodeUtf8 txt
+        step (PutTag xs) = do
+            putWord8 1
+            putByteString $ T.encodeUtf8 xs
+        step (PutKeyWord xs) = do
+            putWord8 0
+            putByteString $ T.encodeUtf8 xs
+
+
 
 {-- 
     Toplevel API 

@@ -3,13 +3,17 @@ module CLI where
 import Lib
 import qualified Model as M
 import Control.Monad
+import Control.Monad.Trans
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as L
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 import qualified Data.Set as S
+import qualified Data.FuzzySet as F
 import System.IO
 import System.Environment
+import Data.Maybe
+import Data.Aeson as A
 import Data.Aeson.Encode.Pretty
 
 data Mode = GetRecord {database :: String, record :: String}
@@ -20,7 +24,9 @@ data Mode = GetRecord {database :: String, record :: String}
 
 usage :: String -> IO ()
 usage err = putStrLnErr "usage:" 
-    *> putStrLnErr "<program> [database] get <recordname>" 
+    *> putStrLnErr "<program> get [database] <recordname>" 
+    *> putStrLnErr "<program> save [database] <recordname> <tagfile>" 
+    *> putStrLnErr "<program> search [database] <searchparam>" 
     *> error err
 
 putStrLnErr = hPutStrLn stderr
@@ -31,12 +37,31 @@ main = do
     when (length xs < 2) $ usage "Not enough parameters"
     let action = head xs 
     case action of
+
+        "search" -> case drop 1 xs of
+                        [db, search] -> do
+                            xs <- M.evalDBMonad (do 
+                                xs <- listRecords
+                                forM xs loadRecord) (M.Env db "")
+                            forM_ xs $ \x -> do 
+
+                                let fz = M.fuzzy x
+                                case F.get fz (T.pack search) of
+                                    [] -> pure ()
+                                    _ -> putStrLn $ M.recordName x <> " matches"   
+                                 
+                        xs -> usage "Wrong number of arguments for search"
+
+        
         "save"-> case drop 1 xs of
                     [db, record, tags] -> do
                         rs <- B.readFile record
-                        ts <- B.readFile tags
+                        ts <- L.readFile tags
                         putStrLnErr $ "Saving record in " <> db <> "/" <> record
-                        M.evalDBMonad (saveRecord $ buildIndexes $ M.emptyRecord {M.text = T.decodeUtf8 rs, M.tags = S.fromList $ T.words $ T.decodeUtf8 ts}) (M.Env db record)
+                        let b = A.decode ts
+                        when (isNothing b) $ usage "You have a typo in the tag file" 
+                        M.evalDBMonad (saveRecord $ buildIndexes $ M.emptyRecord {M.recordName = record, M.text = T.decodeUtf8 rs, M.tags = fromJust $ b}) (M.Env db record)
+                    xs -> usage "Not correct number of parameters for save"
 
         "get" -> case drop 1 xs of
                     [db,record] -> do 
@@ -50,6 +75,7 @@ main = do
                         L.writeFile (M.recordName r <> ".fuzzy") (encodePretty $ M.fuzzy r) 
                         B.writeFile (M.recordName r) (T.encodeUtf8 $ M.text r) 
                     xs -> usage "Wrong number of arguments for get" 
+        xs -> usage "Not correct command"
 
 
 

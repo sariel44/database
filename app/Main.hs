@@ -1,6 +1,3 @@
 module Main where
-
-import Lib
-
-main :: IO ()
-main = undefined
+import qualified CLI as C
+main = C.main

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8b6f463a4a23805c111a10afd0027032ba40ae95dda709bccf9d23910b768d93
+-- hash: 261e0621d16a786c6c422836c9197f83f29f377827033f59b1e44100b50d7c9a
 
 name:           database
 version:        0.1.0.0
@@ -27,6 +27,7 @@ source-repository head
 
 library
   exposed-modules:
+      CLI
       Lib
       Model
       Text

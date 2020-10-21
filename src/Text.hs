@@ -2,6 +2,7 @@
 module Text where
 
 
+import qualified Data.FuzzySet as F
 import qualified Data.Text as T
 import qualified Data.Set as S
 import Data.List
@@ -15,4 +16,6 @@ filterWords xs n = S.fromList $ map (head.snd) $ take n $ wordRelativeFrequency
           wordRelativeFrequency = reverse . sortOn (fst) $ map (\x -> (fromIntegral (length x)/wordCount , x)) . group . sort $ words 
 
 
-fq = filterWords "hello world hello world"
+buildFuzzySet :: [T.Text] -> F.FuzzySet
+buildFuzzySet xs = foldr step F.defaultSet xs 
+    where step x z = z `F.add` x

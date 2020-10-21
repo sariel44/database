@@ -1,9 +1,9 @@
-{-#LANGUAGE TemplateHaskell, GeneralizedNewtypeDeriving, OverloadedStrings #-}
+{-#LANGUAGE TemplateHaskell, GeneralizedNewtypeDeriving, OverloadedStrings, OverloadedLists #-}
 module Model where
 
 import qualified Data.Text as T
 import qualified Data.Set as S
-import Data.FuzzySet
+import Data.FuzzySet as F
 import Data.FuzzySet.Types
 import qualified Data.Map as M
 import qualified Data.ByteString as B
@@ -18,7 +18,7 @@ import Control.Monad.Except
 newtype Secret = Secret { secret :: B.ByteString }  
 
 data Record = Record { 
-      fuzzy :: M.Map T.Text FuzzySet
+      fuzzy :: FuzzySet
     , recordName :: String
     , keywords :: S.Set T.Text
     , tags :: S.Set T.Text
@@ -31,7 +31,7 @@ data Env = Env {
 }
 
 emptyRecord :: Record
-emptyRecord = Record M.empty "" S.empty S.empty "" 
+emptyRecord = Record (F.emptySet 0 0 False) "" S.empty S.empty "" 
 
 newtype DBMonad a = DBMonad { runDBMonad :: ReaderT Env (ExceptT String IO) a}
         deriving (Monad, Functor, Applicative, MonadIO, MonadError String, MonadReader Env)

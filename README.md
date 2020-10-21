@@ -30,5 +30,4 @@ First create a gpg key
 
 # Todo 
 
-Add random keyvalue pairs as metadata
-Implement foreign keys 
+* Add random keyvalue pairs as metadata

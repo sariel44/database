@@ -40,8 +40,8 @@ loadRecord recordname = do
 saveRecord :: Record -> DBMonad ()
 saveRecord record = do 
         dbpath <- asks currentDatabasePath
-        let fp = dbpath <> "/" <> recordName <> ".tmp"
-        let fpnew = dbpath <> "/" <> recordName <> ".json"
+        let fp = dbpath <> "/" <> recordName record <> ".tmp"
+        let fpnew = dbpath <> "/" <> recordName record <> ".json"
         liftIO $ encodeFile fp record
         liftIO $ renameFile fp fpnew 
 

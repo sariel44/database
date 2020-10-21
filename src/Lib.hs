@@ -20,11 +20,14 @@ import qualified Data.Set as S
 
 import qualified Data.Vector as V
 import qualified Data.ByteString as B
+import qualified Data.ByteString.Lazy as L
 
 import Data.Monoid 
 import System.Directory
 import System.IO
 import Data.Aeson
+import Data.Aeson.Encode.Pretty
+import Data.List
 
 import Model
 import Text
@@ -45,14 +48,17 @@ saveRecord record = do
         dbpath <- asks currentDatabasePath
         let fp = dbpath <> "/" <> recordName record <> ".tmp"
         let fpnew = dbpath <> "/" <> recordName record 
-        liftIO $ encodeFile fp record
+        liftIO $ do 
+            putStrLn $ "Saving ion " <> fp <> "  " <> fpnew
+        liftIO $ L.writeFile fp $ encodePretty record
         liftIO $ renameFile fp fpnew 
 
 
 listRecords :: DBMonad [String]
 listRecords = do
     dbpath <- asks currentDatabasePath
-    liftIO $ getDirectoryContents dbpath
+    xs <- liftIO $ getDirectoryContents dbpath
+    return $ filter (not . ("." `isPrefixOf`)) xs
 
 
 buildIndexes :: Record -> Record

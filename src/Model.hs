@@ -26,8 +26,8 @@ data Record = Record {
 }
 
 data Env = Env {
-    currentRecordName :: String,
-    currentDatabasePath :: FilePath
+    currentDatabasePath :: FilePath,
+    currentRecordName :: String
 }
 
 emptyRecord :: Record

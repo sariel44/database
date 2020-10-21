@@ -30,7 +30,7 @@ dependencies:
 - bytestring
 - mtl
 - aeson
-- command-cli
+- commander-cli
 
 library:
   source-dirs: src

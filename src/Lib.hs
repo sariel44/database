@@ -59,7 +59,6 @@ buildIndexes r1 = Record (buildFuzzySet (S.toList $ wrds `S.union` tgs)) (record
     where wrds = filterWords (text r1) 20
           tgs =  tags r1
 
-
 appendToRecord :: Record -> Record -> DBMonad ()
 appendToRecord r1 r2 | recordName r1 == recordName r2 = saveRecord $ buildIndexes newRecord 
         where newRecord = r2 {keywords = keywords r1 <> keywords r2, tags = tags r1 <> tags r2, text = text r1 <> "\n" <> text r2}

@@ -2,6 +2,7 @@
 module Model where
 
 import qualified Data.Text as T
+import qualified Data.Set as S
 import Data.FuzzySet
 import Data.FuzzySet.Types
 import qualified Data.Map as M
@@ -19,8 +20,8 @@ newtype Secret = Secret { secret :: B.ByteString }
 data Record = Record { 
       fuzzy :: M.Map T.Text FuzzySet
     , recordName :: String
-    , keywords :: [T.Text]
-    , tags :: M.Map T.Text Bool
+    , keywords :: S.Set T.Text
+    , tags :: S.Set T.Text
     , text :: T.Text
 }
 
@@ -30,7 +31,7 @@ data Env = Env {
 }
 
 emptyRecord :: Record
-emptyRecord = Record M.empty "" [] M.empty "" 
+emptyRecord = Record M.empty "" S.empty S.empty "" 
 
 newtype DBMonad a = DBMonad { runDBMonad :: ReaderT Env (ExceptT String IO) a}
         deriving (Monad, Functor, Applicative, MonadIO, MonadError String, MonadReader Env)

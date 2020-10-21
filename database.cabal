@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 261e0621d16a786c6c422836c9197f83f29f377827033f59b1e44100b50d7c9a
+-- hash: 1a22c4ccb20bc4af267fbbf052e652d1be2ce8376e002b478959c1153769b6f6
 
 name:           database
 version:        0.1.0.0
@@ -37,9 +37,10 @@ library
       src
   build-depends:
       aeson
+    , aeson-pretty
     , base >=4.7 && <5
     , bytestring
-    , commander-cli
+    , cmdargs
     , containers
     , cryptonite
     , directory
@@ -58,9 +59,10 @@ executable database-exe
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
+    , aeson-pretty
     , base >=4.7 && <5
     , bytestring
-    , commander-cli
+    , cmdargs
     , containers
     , cryptonite
     , database
@@ -81,9 +83,10 @@ test-suite database-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
+    , aeson-pretty
     , base >=4.7 && <5
     , bytestring
-    , commander-cli
+    , cmdargs
     , containers
     , cryptonite
     , database

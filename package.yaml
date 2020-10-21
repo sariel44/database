@@ -30,7 +30,8 @@ dependencies:
 - bytestring
 - mtl
 - aeson
-- commander-cli
+- aeson-pretty
+- cmdargs
 
 library:
   source-dirs: src

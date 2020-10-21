@@ -3,6 +3,7 @@ module Lib
     ( loadRecord 
     , saveRecord 
     , listRecords
+    , buildIndexes
     ) where
 
 import qualified Data.Map.Strict as M 

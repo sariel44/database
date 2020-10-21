@@ -45,3 +45,8 @@ saveRecord record = do
         liftIO $ encodeFile fp record
         liftIO $ renameFile fp fpnew 
 
+
+listRecords :: DBMonad [String]
+listRecords = do
+    dbpath <- asks currentDatabasePath
+    liftIO $ getDirectoryContents dbpath

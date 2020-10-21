@@ -40,6 +40,9 @@ packages:
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
 #
 # extra-deps: []
+extra-deps: 
+- commander-cli-0.10.1.2@sha256:7e56defff88e8f9c19eba6138db96a57070a20b94a2c6f481c86c4375a5109a6,2384
+- commandert-0.1.0.0@sha256:9e1ec325b42d3a0d9b1657efb926c52db99757fb0bbd9779b37eacf8bdd2aebe,1228
 
 # Override default flag values for local packages and extra-deps
 # flags: {}

@@ -3,7 +3,21 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    hackage: commander-cli-0.10.1.2@sha256:7e56defff88e8f9c19eba6138db96a57070a20b94a2c6f481c86c4375a5109a6,2384
+    pantry-tree:
+      size: 372
+      sha256: 988385b9abd7251d39d3e0f5c98fd9f4ac20e111a6b4b2707049f57904830e92
+  original:
+    hackage: commander-cli-0.10.1.2@sha256:7e56defff88e8f9c19eba6138db96a57070a20b94a2c6f481c86c4375a5109a6,2384
+- completed:
+    hackage: commandert-0.1.0.0@sha256:9e1ec325b42d3a0d9b1657efb926c52db99757fb0bbd9779b37eacf8bdd2aebe,1228
+    pantry-tree:
+      size: 279
+      sha256: 662296bf824cd3bfa7acbcdb6353b0acc83c6ca106613af2d1163cb24224a041
+  original:
+    hackage: commandert-0.1.0.0@sha256:9e1ec325b42d3a0d9b1657efb926c52db99757fb0bbd9779b37eacf8bdd2aebe,1228
 snapshots:
 - completed:
     size: 532177

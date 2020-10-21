@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9df57e0f872b7a2922a9a596adeb1a0fe1b1a1035b0a60b164d5974bc271e25a
+-- hash: 983b06a28b9f38717f34f07b1e3c0f779860c1025f4e219dd174e962daaba912
 
 name:           database
 version:        0.1.0.0
@@ -28,14 +28,15 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Model
   other-modules:
       Paths_database
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
     , bytestring
-    , cereal
     , containers
     , cryptonite
     , directory
@@ -53,9 +54,9 @@ executable database-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
     , bytestring
-    , cereal
     , containers
     , cryptonite
     , database
@@ -75,9 +76,9 @@ test-suite database-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
     , bytestring
-    , cereal
     , containers
     , cryptonite
     , database

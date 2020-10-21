@@ -1,4 +1,4 @@
-{-# LANGUAGE KindSignatures, MultiParamTypeClasses, ViewPatterns, FlexibleContexts, OverloadedStrings, GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE KindSignatures, MultiParamTypeClasses, ViewPatterns, FlexibleContexts, OverloadedStrings, GeneralizedNewtypeDeriving, ScopedTypeVariables #-}
 module Lib
     ( loadDatabase
     , saveDatabase
@@ -28,6 +28,11 @@ import Data.Word
 
 import Crypto.KDF.PBKDF2
 import Crypto.Cipher.AES (AES256)
+import Crypto.Cipher.Types
+import           Crypto.Cipher.AES (AES256)
+import           Crypto.Cipher.Types (BlockCipher(..), Cipher(..), nullIV, KeySizeSpecifier(..), IV, makeIV)
+import           Crypto.Error (CryptoFailable(..), CryptoError(..))
+
 import Crypto.Random.EntropyPool
 
 
@@ -75,17 +80,16 @@ class FileLister m where
 class FileSaver m where
     saveFile :: String -> B.ByteString -> m ()
 
+class OpsEncrypter (m :: * -> *) o where
+    encryptOps :: Secret -> [o] -> m B.ByteString
 
-class OpsCrypter (m :: * -> *) o where 
-    encryptOps :: MonadError String m => Secret -> [o] -> m B.ByteString
 
-class OpsDecrypter (m :: * -> *) o where 
-    decryptOps :: MonadError String m => Secret -> B.ByteString -> m [o]
+class OpsDecrypter (m :: * -> *) o where
+    decryptOps :: Secret -> B.ByteString -> m [o] 
 
 
 class GetBits m where
     getBits :: Int -> m B.ByteString
-
 
 {-- DBMonad --}
 
@@ -98,7 +102,6 @@ instance GetBits DBMonad where
         et <- ask
         liftIO $ getEntropyFrom et n 
 
-        
 
 instance FileLister DBMonad where 
     listFiles fp = liftIO (getDirectoryContents fp)
@@ -106,23 +109,37 @@ instance FileLister DBMonad where
 instance FileSaver DBMonad where 
     saveFile fp = liftIO . B.writeFile fp 
 
+parameters :: Parameters
 parameters = Parameters 4000 256
 
-instance OpsCrypter DBMonad DBOp where
-    encryptOps s bs = do
-            let bs = runPut printer
-            return bs
+blockCipher :: AES256
+blockCipher = undefined
 
-        where printer :: Put 
-              printer = do
+deriveKey :: Secret -> B.ByteString
+deriveKey s = fastPBKDF2_SHA512 parameters (secret s) salt  
+
+instance OpsEncrypter DBMonad DBOp where 
+    encryptOps s ops = do
+            let bs = runPut printer
+            let key = deriveKey s
+            case cipherInit key of 
+                CryptoFailed e -> throwError (show e)
+                CryptoPassed (c :: AES256) -> do                    
+                    iv <- makeIV <$> getBits  (blockSize c)
+                    case iv of
+                        Nothing -> throwError "No iv created"
+                        Just iv -> return $ ctrCombine c iv bs 
+        where 
+            (major,minor,patch) = version
+            printer :: Put 
+            printer = do
                 putByteString magic
                 putWord8 major 
                 putWord8 minor 
                 putWord8 patch 
                 putWord8 0
-                putByteString (encodeOps bs)
+                putByteString (encodeOps ops)
 
-              (major,minor,patch) = version
 
 encodeOps :: [DBOp] -> B.ByteString
 encodeOps = undefined

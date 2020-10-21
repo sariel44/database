@@ -1,8 +1,8 @@
 {-# LANGUAGE KindSignatures, MultiParamTypeClasses, ViewPatterns, FlexibleContexts, OverloadedStrings, GeneralizedNewtypeDeriving, ScopedTypeVariables #-}
 module Lib
-    ( loadDatabase
-    , saveDatabase
-
+    ( loadRecord 
+    , saveRecord 
+    , listRecords
     ) where
 
 import qualified Data.Map.Strict as M 

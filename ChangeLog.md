@@ -1,3 +1,3 @@
 # Changelog for database
 
-## Unreleased changes
+* Refactored cli interface a bit

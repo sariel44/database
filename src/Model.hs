@@ -23,6 +23,7 @@ data Record = Record {
     , keywords :: S.Set T.Text
     , tags :: S.Set T.Text
     , text :: T.Text
+    , metadata :: M.Map T.Text T.Text
 }
 
 data Env = Env {
@@ -31,7 +32,7 @@ data Env = Env {
 }
 
 emptyRecord :: Record
-emptyRecord = Record (F.emptySet 0 0 False) "" S.empty S.empty "" 
+emptyRecord = Record (F.emptySet 0 0 False) "" S.empty S.empty "" M.empty 
 
 newtype DBMonad a = DBMonad { runDBMonad :: ReaderT Env (ExceptT String IO) a}
         deriving (Monad, Functor, Applicative, MonadIO, MonadError String, MonadReader Env)

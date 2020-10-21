@@ -15,6 +15,7 @@ import Control.Monad.Trans
 import Control.Monad.State
 import Control.Monad.Reader
 import Control.Monad.Except
+import qualified Data.Set as S
 
 import qualified Data.Vector as V
 import qualified Data.ByteString as B
@@ -31,7 +32,7 @@ import Model
 loadRecord :: FilePath -> DBMonad Record
 loadRecord recordname = do 
     dbpath <- asks currentDatabasePath
-    let fp = dbpath <> "/" <> recordname <> ".json" 
+    let fp = dbpath <> "/" <> recordname 
     content <- liftIO $ B.readFile fp 
     case decodeStrict content of 
         Nothing -> throwError $ "Couldn't decode bytestring for record " <> recordname
@@ -41,7 +42,7 @@ saveRecord :: Record -> DBMonad ()
 saveRecord record = do 
         dbpath <- asks currentDatabasePath
         let fp = dbpath <> "/" <> recordName record <> ".tmp"
-        let fpnew = dbpath <> "/" <> recordName record <> ".json"
+        let fpnew = dbpath <> "/" <> recordName record 
         liftIO $ encodeFile fp record
         liftIO $ renameFile fp fpnew 
 
@@ -50,3 +51,11 @@ listRecords :: DBMonad [String]
 listRecords = do
     dbpath <- asks currentDatabasePath
     liftIO $ getDirectoryContents dbpath
+
+
+rebuildIndexes :: Record -> DBMonad Record
+rebuildIndexes r1 = undefined
+
+
+appendToRecord :: Record -> Record -> DBMonad ()
+appendToRecord r1 r2 = undefined

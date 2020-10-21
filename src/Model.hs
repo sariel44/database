@@ -37,6 +37,13 @@ newtype DBMonad a = DBMonad { runDBMonad :: ReaderT Env (ExceptT String IO) a}
         deriving (Monad, Functor, Applicative, MonadIO, MonadError String, MonadReader Env)
 
 
+evalDBMonad :: DBMonad a -> Env -> IO a
+evalDBMonad m env = do 
+    xs <- runExceptT $ runReaderT ( runDBMonad m) env 
+    case xs of
+        Left e -> error e
+        Right a -> return a
+
 $(deriveJSON defaultOptions ''Record)
 $(deriveJSON defaultOptions ''FuzzySet)
 $(deriveJSON defaultOptions ''GramInfo)

@@ -2,3 +2,4 @@
 
 * Refactored cli interface a bit
 * Added simple task system
+* Refactored task system

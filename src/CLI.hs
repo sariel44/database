@@ -21,6 +21,12 @@ usage err = putStrLnErr "usage:"
     *> putStrLnErr "<program> get [database] <recordname>" 
     *> putStrLnErr "<program> save [database] <recordname> <tagfile>" 
     *> putStrLnErr "<program> search [database] <searchparam>" 
+    *> putStrLnErr "<program> task-save [database] <taskname> <tagfile>" 
+    *> putStrLnErr "<program> task-busy [database] <taskname>" 
+    *> putStrLnErr "<program> task-open [database] <taskname>" 
+    *> putStrLnErr "<program> task-done [database] <taskname>" 
+    *> putStrLnErr "<program> task-search [database] <search>" 
+    *> putStrLnErr "<program> task-get [database] <taskname>" 
     *> error err
 
 putStrLnErr :: String -> IO ()
@@ -39,6 +45,7 @@ main :: IO ()
 main = do 
     mode <- modeSwitch  
     case mode of
+        ("help", xs) -> usage ""
         ("task-save",[db,taskName,tags]) -> do
                         putStrLnErr $ "Saving record in " <> db <> "/" <> taskName
                         rs <- B.readFile taskName 

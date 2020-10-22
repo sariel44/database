@@ -45,5 +45,8 @@ First create a gpg key
 * Build global index
 * Allow cross references
 
-#Refs
+# Refs
+
 [1] https://git-secret.io
+
+Interested in the data, don't hesitate to contact me. I am here to help, but only to the right people ^_^

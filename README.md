@@ -6,6 +6,8 @@ It allows encryption through git-secret. I wanted something I could search throu
 
 Git and git-secret[1] together with this simple tool matches perfectly.  
 
+I also implemented a simple task system
+
 # Installation 
 
     bash install.sh

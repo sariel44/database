@@ -22,17 +22,26 @@ First create a gpg key
     database-exec get database <recordname>
 
     database-exec show database <recordname>
+
+    database-exec search <searchword>
     
     database-exec save database <recordname> <tagfile>
     git-secret add database/recordname
     git-secret hide 
+  
+    database-exec task-create taskname tagfile 
+    database-exec task-open taskname tagfile 
+    database-exec task-busy taskname 
+    database-exec task-done taskname 
+    database-exec task-search <searchword>
 
 
     database-exec search <keyword>
 
 # Todo 
 
-* Add random keyvalue pairs as metadata
+* Build global index
+* Allow cross references
 
 #Refs
 [1] https://git-secret.io

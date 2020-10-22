@@ -20,6 +20,8 @@ First create a gpg key
     git-secret tell <your email address>
 
     database-exec get database <recordname>
+
+    database-exec show database <recordname>
     
     database-exec save database <recordname> <tagfile>
     git-secret add database/recordname

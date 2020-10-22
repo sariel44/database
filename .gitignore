@@ -24,3 +24,4 @@ cabal.project.local~
 .gitsecret/keys/random_seed
 !*.secret
 database/bla
+tasks/new-task

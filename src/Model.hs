@@ -17,6 +17,8 @@ import Control.Monad.Except
  
 newtype Secret = Secret { secret :: B.ByteString }  
 
+data Status = Open | Busy | Done
+
 data Record = Record { 
       fuzzy :: FuzzySet
     , recordName :: String
@@ -26,10 +28,22 @@ data Record = Record {
     , metadata :: M.Map T.Text T.Text
 }
 
+data Task = Task {
+        fuzzyTask :: FuzzySet
+      , taskName :: String
+      , description :: T.Text 
+      , keywordsTask :: S.Set T.Text
+      , tagsTask :: S.Set T.Text
+      , status :: Status
+}
+
 data Env = Env {
     currentDatabasePath :: FilePath,
     currentRecordName :: String
 }
+
+emptyTask :: Task
+emptyTask = Task (F.emptySet 0 0 False) "" "" S.empty S.empty Open
 
 emptyRecord :: Record
 emptyRecord = Record (F.emptySet 0 0 False) "" S.empty S.empty "" M.empty 
@@ -49,3 +63,5 @@ $(deriveJSON defaultOptions ''Record)
 $(deriveJSON defaultOptions ''FuzzySet)
 $(deriveJSON defaultOptions ''GramInfo)
 $(deriveJSON defaultOptions ''FuzzySetItem)
+$(deriveJSON defaultOptions ''Status)
+$(deriveJSON defaultOptions ''Task)

@@ -49,4 +49,4 @@ First create a gpg key
 
 [1] https://git-secret.io
 
-Interested in the data, don't hesitate to contact me. I am here to help, but only to the right people ^_^
+Interested in the data, don't hesitate to contact me. I am here to help, but only to the right people ^_^ It is easy to add another GPG key to give access to.

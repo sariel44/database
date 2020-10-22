@@ -25,3 +25,5 @@ cabal.project.local~
 !*.secret
 database/bla
 tasks/new-task
+database/refolutionair
+tasks/contact-geuzenbond

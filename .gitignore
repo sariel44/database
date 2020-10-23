@@ -25,5 +25,6 @@ cabal.project.local~
 !*.secret
 database/bla
 tasks/new-task
-database/refolutionair
+persons/refolutionair
 tasks/contact-geuzenbond
+tasks/screen-chatbotman

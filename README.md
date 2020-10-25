@@ -21,17 +21,12 @@ First create a gpg key
 
     git-secret tell <your email address>
 
-    database-exec get database <recordname>
-
-    database-exec show database <recordname>
-
+    ./utils/create.sh database name tag1 tag2 tag3
+    ./utils/edit.sh database name
     database-exec search <searchword>
     
-    database-exec save database <recordname> <tagfile>
-    git-secret add database/recordname
-    git-secret hide 
-  
-    database-exec task-create taskname tagfile 
+    ./utils/create-task.sh name tag1 tag2 tag3
+
     database-exec task-open taskname tagfile 
     database-exec task-busy taskname 
     database-exec task-done taskname 
@@ -42,6 +37,8 @@ First create a gpg key
 
 # Todo 
 
+* Build javascript client lib for just reading records 
+* Build edit script for task
 * Build global index
 * Allow cross references
 

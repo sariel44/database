@@ -14,13 +14,13 @@ shift
 name="$1"
 shift
 
+if [ "$database"x = "x" ]; then 
+  echo "Need a database" 1>&2
+fi 
+
 if [ "$name"x = "x" ]; then
   echo "Need a name" 1>&2
   exit 1
-fi 
-
-if [ "$database"x = "x" ]; then 
-  echo "Need a database" 1>&2
 fi 
 
 edit "$name"

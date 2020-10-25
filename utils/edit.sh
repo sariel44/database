@@ -12,12 +12,10 @@ if [ "$database"x = "x" ]; then
   echo "Need a database" 1>&2
 fi 
 
-cat ../templates/$database >> "$name"
+datase-exe get "$database" "$name"
+
 
 nvim "$name" < `tty` > `tty`
-
-echo '["<exampletag>"]' >> "${name}.tags"
-
 nvim "$name.tags" < `tty` > `tty`
 
 database-exe save "$database" "$name" "${name}.tags" 

@@ -2,8 +2,16 @@
 
 set -e
 
+if [ ! -d utils ]; then 
+  echo "Run this script as from the root of the project" 1>&2
+  exit 1
+fi 
+
+. utils/lib.sh
 database="$1"
-name="$2"
+shift
+name="$1"
+shift
 
 if [ "$name"x = "x" ]; then
   echo "Need a name" 1>&2
@@ -14,20 +22,18 @@ if [ "$database"x = "x" ]; then
   echo "Need a database" 1>&2
 fi 
 
-echo "<Add your data here>" > "$name" 
+cat_template "$database" "$name"
 
-nvim "$name" < `tty` > `tty`
+edit "$name"
 
-echo '["<exampletag"]' > "${name}.tags"
+write_tags "$name" $@
 
-nvim "$name.tags" < `tty` > `tty`
+edit "$name.tags" 
 
 database-exe task-create "$database" "$name" "${name}.tags" 
 
-echo "Hiding change"
-git-secret add "$database/$name"
-git-secret hide
-echo "Staging change"
-git add "$database/${name}.secret"
+hide_and_add "$database" "$name"
+
+cleanup "$name"
 
 

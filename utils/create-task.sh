@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 database="$1"
 name="$2"
 
@@ -20,7 +22,7 @@ echo '["<exampletag"]' > "${name}.tags"
 
 nvim "$name.tags" < `tty` > `tty`
 
-database-exe save "$database" "$name" "${name}.tags" 
+database-exe task-create "$database" "$name" "${name}.tags" 
 
 echo "Hiding change"
 git-secret add "$database/$name"

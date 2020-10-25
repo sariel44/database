@@ -22,6 +22,13 @@ nvim "$name.tags" < `tty` > `tty`
 
 database-exe save "$database" "$name" "${name}.tags" 
 
+echo "Hiding change"
+git-secret add "$database/$name"
+git-secret hide
+echo "Staging change"
+git add "$database/${name}.secret"
+
+
 
 
 

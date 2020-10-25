@@ -32,3 +32,17 @@ hide_and_add(){
   echo "Staging change"
   git add "$database/${name}.secret" 1>&2
 }
+
+list_templates_db(){
+  ls templates 
+}
+
+remove_non_secret(){
+  while read ls; do 
+    ls "$ls/" | while read entity; do 
+    bsn="$(basename --suffix=".secret" "$entity")"
+    echo "Removing $ls/$bsn"
+    rm -fv "$ls/$bsn"
+    done
+  done 
+}

@@ -8,28 +8,25 @@ if [ ! -d utils ]; then
 fi 
 
 . utils/lib.sh
+
 database="tasks"
 name="$1"
-shift
+
+if [ "$database"x = "x" ]; then 
+  echo "Need a database" 1>&2
+fi 
 
 if [ "$name"x = "x" ]; then
   echo "Need a name" 1>&2
   exit 1
 fi 
 
-if [ "$database"x = "x" ]; then 
-  echo "Need a database" 1>&2
-fi 
-
-cat_template "$database" "$name"
+database-exe task-get "$database" "$name"
 
 edit "$name"
+edit "${name}.tags"
 
-write_tags "$name" $@
-
-edit "$name.tags" 
-
-database-exe task-create "$database" "$name" "${name}.tags" 
+database-exe task-save "$database" "$name" "${name}.tags" 
 
 hide_and_add "$database" "$name"
 

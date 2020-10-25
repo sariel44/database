@@ -10,8 +10,7 @@ I also implemented a simple task system
 
 # Installation 
 
-    bash install.sh
-    stack install 
+   make install 
 
 # Usage 
 
@@ -23,27 +22,30 @@ First create a gpg key
 
     ./utils/create.sh database name tag1 tag2 tag3
     ./utils/edit.sh database name
-    database-exec search <searchword>
+
+    database-exec database search <keyword>
+
     
     ./utils/create-task.sh name tag1 tag2 tag3
+    ./utils/edit-task.sh name 
+    ./utils/move-task name (open|busy|done)
 
-    database-exec task-open taskname tagfile 
-    database-exec task-busy taskname 
-    database-exec task-done taskname 
-    database-exec task-search <searchword>
+    database-exec tasks search <keyword>
 
-
-    database-exec search <keyword>
+    ./utils/reveal.sh
+    ... do something with the data ...
+    ./utils/cleanup.sh
 
 # Todo 
 
 * Build javascript client lib for just reading records 
-* Build edit script for task
 * Build global index
-* Allow cross references
+* Allow cross references (with checks!)
+* Add a slow chat widget (perhaps through ncurses)
 
 # Refs
 
 [1] https://git-secret.io
 
+# What more
 Interested in the data, don't hesitate to contact me. I am here to help, but only to the right people ^_^ It is easy to add another GPG key to give access to.

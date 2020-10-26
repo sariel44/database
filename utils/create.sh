@@ -23,6 +23,9 @@ if [ "$name"x = "x" ]; then
   exit 1
 fi 
 
+cat_template "$database" "$name" 
+
+
 edit "$name"
 
 write_tags "$name" $@

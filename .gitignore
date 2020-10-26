@@ -37,3 +37,4 @@ persons/gernot.eisert
 persons/joerg_becker
 tasks/script-to-push-data-into-es
 tasks/create-metadata-extractor
+tasks/look-if-git-crypt-is-better-solution

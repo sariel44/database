@@ -29,7 +29,7 @@ write_tags "$name" $@
 
 edit "$name.tags" 
 
-database-exe task-create "$database" "$name" "${name}.tags" 
+database-exe task-save "$database" "$name" "${name}.tags" 
 
 hide_and_add "$database" "$name"
 

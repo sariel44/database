@@ -23,14 +23,15 @@ First create a gpg key
     ./utils/create.sh database name tag1 tag2 tag3
     ./utils/edit.sh database name
 
-    database-exec database search <keyword>
+    database-exec search database <keyword>
+    database-exec show database name
 
     
     ./utils/create-task.sh name tag1 tag2 tag3
     ./utils/edit-task.sh name 
     ./utils/move-task name (open|busy|done)
 
-    database-exec tasks search <keyword>
+    database-exec search tasks <keyword>
 
     ./utils/reveal.sh
     ... do something with the data ...
@@ -38,6 +39,8 @@ First create a gpg key
 
 # Todo 
 
+* Extract metadata from record (Format ^key: value$)
+* Make script to load everything automatically in elastic search
 * Build javascript client lib for just reading records 
 * Build global index
 * Allow cross references (with checks!)

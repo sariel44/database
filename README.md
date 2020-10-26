@@ -39,10 +39,12 @@ First create a gpg key
 
 # Todo 
 
+Priority sorted
+
+* look into git-crypt
 * Extract metadata from record (Format ^key: value$)
 * Make script to load everything automatically in elastic search
 * Build javascript client lib for just reading records 
-* Build global index
 * Allow cross references (with checks!)
 * Add a slow chat widget (perhaps through ncurses)
 

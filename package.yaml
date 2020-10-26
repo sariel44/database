@@ -32,18 +32,29 @@ dependencies:
 - aeson
 - aeson-pretty
 - cmdargs
+- scotty
+- shelly
 
 library:
   source-dirs: src
 
 executables:
+  web-exe:
+    main:   Main.hs
+    source-dirs: web
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=N
+    dependencies:
+    - database
   database-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
     - -threaded
     - -rtsopts
-    - -with-rtsopts=-N
+    - -with-rtsopts=N
     dependencies:
     - database
 

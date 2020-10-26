@@ -41,6 +41,7 @@ First create a gpg key
 
 Priority sorted
 
+* Adding webinterface
 * look into git-crypt
 * Extract metadata from record (Format ^key: value$)
 * Make script to load everything automatically in elastic search

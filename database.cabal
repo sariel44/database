@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: adbda60520e0eb783b092973ee3556bb0b3b152d672685aae264b8ba612c8fbb
+-- hash: 9d2359243ba6854683621370bef17993012297d82a8937ac33d835f265e4384c
 
 name:           database
 version:        0.1.0.0
@@ -59,7 +59,7 @@ executable database-exe
       Paths_database
   hs-source-dirs:
       app
-  ghc-options: -threaded -rtsopts -with-rtsopts=N
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
     , aeson-pretty
@@ -84,7 +84,7 @@ executable web-exe
       Paths_database
   hs-source-dirs:
       web
-  ghc-options: -threaded -rtsopts -with-rtsopts=N
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
     , aeson-pretty

@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ExtendedDefaultRules #-}
 {-# OPTIONS_GHC -fno-warn-type-defaults #-}
 module WebLib where
@@ -18,13 +18,20 @@ main :: IO ()
 main = scotty 3000 $ do 
 
     get "/db" $ do
-        xs <- liftIO $ S.shelly $ T.lines <$> S.run "ls" ["../templates/"] 
+        xs <- liftIO $ S.shelly $ T.lines <$> S.run "ls" ["templates/"] 
         json xs
 
-    get "/db/:database/" $ do 
+    get "/db/:database" $ do 
         name <- param "database"
         xs <- liftIO $ evalDBMonad (listDB) (Env name "")
         json xs
+
+    get "/db/:database/:name" $ do
+        database <- param "database"
+        name <- param "name"
+        xs <- liftIO $ evalDBMonad (load name :: DBMonad Record) (Env database name)
+        json xs
+
 
 
     get "/show/:database/:name" $ do 

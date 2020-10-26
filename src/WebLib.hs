@@ -38,8 +38,6 @@ main = scotty 3000 $ do
         xs <- liftIO $ M.evalDBMonad (load name :: M.DBMonad M.Record) (M.Env database name)
         json xs
 
-
-
     get "/" $ do 
         html $ renderHtml (
             [shamlet| <h1>hello world</h1>

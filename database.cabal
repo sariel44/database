@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9d2359243ba6854683621370bef17993012297d82a8937ac33d835f265e4384c
+-- hash: a1a8bcdd89aa6f9f8795a9fc4afbd81e77179af0b2d15d71645d1abc920a46fc
 
 name:           database
 version:        0.1.0.0
@@ -40,6 +40,7 @@ library
       aeson
     , aeson-pretty
     , base >=4.7 && <5
+    , blaze-html
     , bytestring
     , cmdargs
     , containers
@@ -48,6 +49,7 @@ library
     , fuzzyset
     , mtl
     , scotty
+    , shakespeare
     , shelly
     , text
     , vector
@@ -64,6 +66,7 @@ executable database-exe
       aeson
     , aeson-pretty
     , base >=4.7 && <5
+    , blaze-html
     , bytestring
     , cmdargs
     , containers
@@ -73,6 +76,7 @@ executable database-exe
     , fuzzyset
     , mtl
     , scotty
+    , shakespeare
     , shelly
     , text
     , vector
@@ -89,6 +93,7 @@ executable web-exe
       aeson
     , aeson-pretty
     , base >=4.7 && <5
+    , blaze-html
     , bytestring
     , cmdargs
     , containers
@@ -98,6 +103,7 @@ executable web-exe
     , fuzzyset
     , mtl
     , scotty
+    , shakespeare
     , shelly
     , text
     , vector
@@ -115,6 +121,7 @@ test-suite database-test
       aeson
     , aeson-pretty
     , base >=4.7 && <5
+    , blaze-html
     , bytestring
     , cmdargs
     , containers
@@ -124,6 +131,7 @@ test-suite database-test
     , fuzzyset
     , mtl
     , scotty
+    , shakespeare
     , shelly
     , text
     , vector

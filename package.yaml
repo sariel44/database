@@ -34,6 +34,8 @@ dependencies:
 - cmdargs
 - scotty
 - shelly
+- shakespeare
+- blaze-html
 
 library:
   source-dirs: src

@@ -30,13 +30,13 @@ fi
 
 case $state in
   open)
-    database-exec task-open "$database" "$name"
+    database-exe task-open "$database" "$name"
     ;;
   busy)
-    database-exec task-busy "$database" "$name"
+    database-exe task-busy "$database" "$name"
     ;;
   "done")
-    database-exec task-done "$database" "$name"
+    database-exe task-done "$database" "$name"
     ;;
   *)
     echo "Wrong task state $state" 1>&2

@@ -17,8 +17,14 @@ import Text.Blaze.Html.Renderer.Text (renderHtml)
 import Web.Scotty
 import qualified Model as M
 import Lib as L 
+import qualified Data.Set as S
 
 import Text.Hamlet
+
+data TextBody = TextBody {
+    body :: T.Text,
+    tags :: S.Set T.Text
+}
 
 main :: IO ()
 main = scotty 3000 $ do 
@@ -42,3 +48,11 @@ main = scotty 3000 $ do
         html $ renderHtml (
             [shamlet| <h1>hello world</h1>
         |])  
+
+    put "/db/:database/:name" $ do 
+        database <- param "database"
+        name <- param "name"
+        (M.TextBody body tags) <- jsonData  
+        liftIO $ M.evalDBMonad (save $ buildIndex $ M.emptyRecord {M.recordName = name, M.text = body, M.tags = tags}) (M.Env database name)
+        json "ok"
+        

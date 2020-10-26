@@ -42,6 +42,13 @@ data Env = Env {
     currentRecordName :: String
 }
 
+
+data TextBody = TextBody {
+    textBody :: T.Text,
+    textTags :: S.Set T.Text
+}
+
+
 emptyTask :: Task
 emptyTask = Task (F.emptySet 0 0 False) "" "" S.empty S.empty Open
 
@@ -65,3 +72,4 @@ $(deriveJSON defaultOptions ''GramInfo)
 $(deriveJSON defaultOptions ''FuzzySetItem)
 $(deriveJSON defaultOptions ''Status)
 $(deriveJSON defaultOptions ''Task)
+$(deriveJSON defaultOptions ''TextBody)

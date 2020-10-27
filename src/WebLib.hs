@@ -49,11 +49,17 @@ main = scotty 3000 $ do
         html $ renderHtml (
             [shamlet| <h1>hello world</h1>
         |])  
+
+    get "/search/:word" $ do 
+        xs <- liftIO $ S.shelly $ T.lines <$> S.run "ls" ["templates/"] 
+
+
     put "/task/:database/:name" $ do
         database <- param "database"
         name <- param "name"
         (M.TextBody body tags) <- jsonData
         liftIO $ M.evalDBMonad (save $ buildIndex $ M.emptyTask {M.taskName = name, M.description = body, M.tagsTask = tags}) (M.Env database name)
+
     post "/task/:database/:name/:status" $ do 
         database <- param "database"
         name <- param "name"

@@ -40,8 +40,17 @@ class Loader a where
 class Saver a where
     save :: a -> DBMonad ()
 
+class Search a where
+    search :: a -> DBMonad [String]
+
 class Indexer a where 
     buildIndex :: a -> a
+
+instance Search Record where
+    search = undefined
+
+instance Search Task where 
+    search = undefined
 
 instance Loader Task where 
     load taskname = do  

@@ -21,6 +21,7 @@ import Lib as L
 import qualified Data.Set as S
 
 import Text.Hamlet
+import WebTemplates
 
 data TextBody = TextBody {
     body :: T.Text,
@@ -29,6 +30,11 @@ data TextBody = TextBody {
 
 main :: IO ()
 main = scotty 3000 $ do 
+
+
+    get "/" $ do 
+        html $  renderHtml (indexHTML defaultRender) 
+
 
     get "/db" $ do
         xs <- liftIO $ S.shelly $ T.lines <$> S.run "ls" ["templates/"] 
@@ -44,11 +50,6 @@ main = scotty 3000 $ do
         name <- param "name"
         xs <- liftIO $ M.evalDBMonad (load name :: M.DBMonad M.Record) (M.Env database name)
         json xs
-
-    get "/" $ do 
-        html $ renderHtml (
-            [shamlet| <h1>hello world</h1>
-        |])  
 
     get "/search/:word" $ do 
         xs <- liftIO $ S.shelly $ T.lines <$> S.run "ls" ["templates/"] 

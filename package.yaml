@@ -36,6 +36,7 @@ dependencies:
 - shelly
 - shakespeare
 - blaze-html
+- blaze-markup
 
 library:
   source-dirs: src

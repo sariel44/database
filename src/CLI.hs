@@ -81,15 +81,10 @@ main = do
                         L.putStrLn $ "keywords: " <> encode (M.keywordsTask r)
                         L.putStrLn $ "status: " <> encode (M.status r)
         ("task-show", xs) -> usage "Wrong number of arguments for setting task to show"
-        ("task-search", [db,search]) -> do 
-                            xs <- M.evalDBMonad (do 
-                                xs <- listDB
-                                forM xs (load :: FilePath -> M.DBMonad M.Task)) (M.Env db "")
-                            forM_ xs $ \x -> do 
-                                    let fz = M.fuzzyTask x
-                                    case F.get fz (T.pack search) of
-                                        [] -> pure ()
-                                        _ -> putStrLn $ M.taskName x <> " matches"   
+        ("task-search", [db,s]) -> do 
+
+                            xs <- M.evalDBMonad (search s) (M.Env db "") :: IO [M.Task] 
+                            forM_ xs $ \x -> putStrLn $ M.taskName  x <> " matches"
 
         ("task-search", xs) -> usage "Wrong number of arguments for setting task search"
         ("task-get", [db,task]) -> do 
@@ -112,15 +107,9 @@ main = do
                             let b = A.decode mts2
                             when (isNothing b) $ liftIO $ usage "You have a typo in your meta file" 
                             save $ buildIndex $ rc {M.metadata = mts <> fromJust b}
-        ("search", [db,search]) -> do 
-                            xs <- M.evalDBMonad (do 
-                                xs <- listDB
-                                forM xs (load :: FilePath -> M.DBMonad M.Record)) (M.Env db "")
-                            forM_ xs $ \x -> do 
-                                    let fz = M.fuzzy x
-                                    case F.get fz (T.pack search) of
-                                        [] -> pure ()
-                                        _ -> putStrLn $ M.recordName x <> " matches"   
+        ("search", [db,s]) -> do 
+                            xs <- M.evalDBMonad (search s) (M.Env db ""):: IO [M.Record]
+                            forM_ xs $ \x -> putStrLn $ (M.recordName x) <> " matches"
                                  
         ("search",xs) -> usage "Wrong number of arguments for search"
         ("save", [db,record, tags]) -> do  

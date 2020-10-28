@@ -3,8 +3,8 @@ module Model where
 
 import qualified Data.Text as T
 import qualified Data.Set as S
-import Data.FuzzySet as F
 import Data.FuzzySet.Types
+import Data.FuzzySet as F
 import qualified Data.Map as M
 import qualified Data.ByteString as B
 import Data.Aeson.TH

@@ -52,6 +52,7 @@ main = scotty 3000 $ do
 
     get "/search/:word" $ do 
         xs <- liftIO $ S.shelly $ T.lines <$> S.run "ls" ["templates/"] 
+        return undefined
 
 
     put "/task/:database/:name" $ do

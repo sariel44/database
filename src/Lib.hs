@@ -4,11 +4,13 @@ module Lib
     , Saver(..)
     , listDB
     , Indexer(..) 
+    , Search(..)
     ) where
 
 import qualified Data.Map.Strict as M 
 import Data.FuzzySet
 import qualified Data.Text as T
+import Data.FuzzySet as F
 import Control.Monad
 import Control.Applicative
 import Control.Monad.IO.Class
@@ -16,6 +18,7 @@ import Control.Monad.Trans
 import Control.Monad.State
 import Control.Monad.Reader
 import Control.Monad.Except
+import Control.Monad.Writer
 import qualified Data.Set as S
 
 import qualified Data.Vector as V
@@ -41,16 +44,38 @@ class Saver a where
     save :: a -> DBMonad ()
 
 class Search a where
-    search :: a -> DBMonad [String]
+    search :: String -> DBMonad [a]
 
 class Indexer a where 
     buildIndex :: a -> a
 
-instance Search Record where
-    search = undefined
+
+
+instance Search Record where 
+    search word = do
+        xs <- listDB
+        records <- forM xs (load :: String -> DBMonad Record)
+        return $ execWriter $ do 
+            forM_ records $ \r -> do
+                let fz = fuzzy r
+                case (F.get fz (T.pack word)) of
+                    [] -> pure ()
+                    _ -> tell [r]
+
+
 
 instance Search Task where 
-    search = undefined
+    search word = do
+        xs <- listDB
+        records <- forM xs (load :: String -> DBMonad Task)
+        return $ execWriter $ do 
+            forM_ records $ \r -> do
+                let fz = fuzzyTask r
+                case (F.get fz (T.pack word)) of
+                    [] -> pure ()
+                    _ -> tell [r]
+
+
 
 instance Loader Task where 
     load taskname = do  

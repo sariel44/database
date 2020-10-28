@@ -15,4 +15,4 @@ defaultRender :: r -> [(T.Text,T.Text)] -> T.Text
 defaultRender _ _ = ""
 
 indexHTML :: Render () -> Html
-indexHTML = $(hamletFile  "webtemplates/index.html")  
+indexHTML = $(hamletFile  "webtemplates/index.haml")  

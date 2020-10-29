@@ -83,4 +83,4 @@ main = scotty 3000 $ do
         json "ok"
         
     get "/js/main.js" $ do 
-            undefined
+        jsFile "/js/main.js"

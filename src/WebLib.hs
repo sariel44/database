@@ -20,6 +20,7 @@ import qualified Model as M
 import Lib as L 
 import qualified Data.Set as S
 
+import Text.Julius
 import Text.Hamlet
 import WebTemplates
 
@@ -83,4 +84,4 @@ main = scotty 3000 $ do
         json "ok"
         
     get "/js/main.js" $ do 
-        jsFile "/js/main.js"
+        text $ renderJavascript (mainJS defaultRender) 

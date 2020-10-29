@@ -7,6 +7,7 @@
 {-# OPTIONS_GHC -fno-warn-type-defaults #-}
 module WebTemplates where 
 import Text.Hamlet
+import Text.Julius
 import qualified Data.Text as T 
 import Text.Blaze
 
@@ -16,3 +17,7 @@ defaultRender _ _ = ""
 
 indexHTML :: Render () -> Html
 indexHTML = $(hamletFile  "webtemplates/index.haml")  
+
+
+mainJS :: Render () -> Javascript
+mainJS = $(jsFile "js/main.js")

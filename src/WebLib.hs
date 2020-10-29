@@ -82,3 +82,5 @@ main = scotty 3000 $ do
         liftIO $ M.evalDBMonad (save $ buildIndex $ M.emptyRecord {M.recordName = name, M.text = body, M.tags = tags}) (M.Env database name)
         json "ok"
         
+    get "/js/main.js" $ do 
+            undefined

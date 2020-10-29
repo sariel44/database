@@ -53,8 +53,12 @@ main = scotty 3000 $ do
         json xs
 
     get "/search/:word" $ do 
-        xs <- liftIO $ S.shelly $ T.lines <$> S.run "ls" ["templates/"] 
-        return undefined
+        dbs <- liftIO $ S.shelly $ T.lines <$> S.run "ls" ["templates/"] 
+        word <- param "word"
+        results <- forM dbs $ \db -> do 
+            result <- liftIO $ M.evalDBMonad (search word) (M.Env (T.unpack db) "")
+            return (db, M.recordName <$> result)
+        json results
 
 
     put "/task/:database/:name" $ do

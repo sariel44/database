@@ -1,6 +1,5 @@
 $(document).ready(function(){
-
-$("searchBtn").click(function(){
-    alert("hello")
+$("#searchBtn").click(function( event ){
+    event.preventDefault();
 })
 })

@@ -84,4 +84,5 @@ main = scotty 3000 $ do
         json "ok"
         
     get "/js/main.js" $ do 
+        addHeader "content-type" "text/javascript"
         text $ renderJavascript (mainJS defaultRender) 

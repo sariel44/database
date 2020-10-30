@@ -124,7 +124,7 @@ listDB :: DBMonad [String]
 listDB = do
     dbpath <- asks currentDatabasePath
     xs <- liftIO $ getDirectoryContents dbpath
-    return $ filter (not . ("." `isPrefixOf`)) xs
+    return $ filter (not . (".secret" `isSuffixOf`)) $ filter (not . ("." `isPrefixOf`)) xs
 
 instance Indexer Record where 
     buildIndex r1 = Record (buildFuzzySet (S.toList $ wrds `S.union` tgs `S.union` mts)) (recordName r1) wrds tgs (text r1) (metadata r1)

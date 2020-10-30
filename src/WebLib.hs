@@ -4,6 +4,7 @@
 {-# LANGUAGE QuasiQuotes           #-}
 {-# LANGUAGE TemplateHaskell       #-}
 {-# LANGUAGE TypeFamilies          #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# OPTIONS_GHC -fno-warn-type-defaults #-}
 module WebLib where
 
@@ -29,6 +30,11 @@ data TextBody = TextBody {
     tags :: S.Set T.Text
 }
 
+key :: [(T.Text, [String])] -> [T.Text]
+key xs = join $ map f xs 
+    where f (db,tbls) = foldr step [] tbls
+            where step x z = (db <> "/" <> T.pack x):z 
+
 main :: IO ()
 main = scotty 3000 $ do 
 
@@ -53,12 +59,13 @@ main = scotty 3000 $ do
         json xs
 
     get "/search/:word" $ do 
-        dbs <- liftIO $ S.shelly $ T.lines <$> S.run "ls" ["templates/"] 
+        dbs <- liftIO $ S.shelly $ T.lines <$> S.run "cat" ["databases"] 
         word <- param "word"
         results <- forM dbs $ \db -> do 
             result <- liftIO $ M.evalDBMonad (search word) (M.Env (T.unpack db) "")
             return (db, M.recordName <$> result)
-        json results
+        
+        json $ key  results
 
 
     put "/task/:database/:name" $ do

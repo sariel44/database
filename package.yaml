@@ -34,9 +34,7 @@ dependencies:
 - cmdargs
 - scotty
 - shelly
-- shakespeare
-- blaze-html
-- blaze-markup
+- stache
 
 library:
   source-dirs: src
